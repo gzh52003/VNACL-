@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册</title>
+    <link rel="stylesheet" href="./css/bootstrap.css">
+</head>
+<style>
+    body {
+        background: url(./images/background.jpg)no-repeat;
+        height: 600px;
+        background-size: 100% 800px;
+        background-attachment: fixed;
+    }
+
+    .container-fluid {
+        width: 500px;
+        position: absolute;
+        top: 265px;
+        left: 100px;
+    }
+
+    .container-fluid p {
+        font-size: 12px;
+        color: pink;
+    }
+</style>
+
+<body>
+    <div class="container-fluid">
+        <h1>后台管理系统</h1>
+        <div class="form-group">
+            <label for="username">用户名 </label>
+            <input type="text" class="form-control" id="username">
+            <div class="invalid-feedback">*请输入用户名</div>
+
+        </div>
+        <div class="form-group">
+            <label for="password">密码</label>
+            <input type="password" class="form-control" id="password">
+            <div class="invalid-feedback">*请输入密码</div>
+
+        </div>
+        <button id="button" class="btn btn-primary">注册</button>
+        <p>已有账号可直接 <a href="./login.html">登录</a></p>
+
+    </div>
+    <script>
+        let _username = document.querySelector("#username");
+        let _password = document.querySelector("#password");
+        let oBtn = document.querySelector("#button");
+
+        oBtn.onclick = async function () {
+
+            let usernamev = _username.value;
+            let passwordv = _password.value;
+            if (!usernamev) {
+                _username.classList.add("is-invalid");
+                return;
+            }
+            if (!passwordv) {
+                password.classList.add("is-invalid");
+                return;
+            }
+
+
+
+            let result = await fetch("http://localhost:2002/api/reg", {
+                method: "post",
+                body: JSON.stringify({
+                    username: usernamev,
+                    password: passwordv
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(function (data) {
+                return data.json()
+
+            });
+            if (result.code === 1) {
+                alert("注册成功")
+                location.href = "./login.html"
+            }
+        }
+    </script>
+</body>
+
+</html>
