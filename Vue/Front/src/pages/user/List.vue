@@ -13,7 +13,7 @@
           type="success"
           icon="el-icon-edit"
           circle
-          @click="goto(scope.row._id)"
+          @click="goto(scope.row.id)"
         ></el-button>
 
         <el-button
@@ -31,10 +31,6 @@
 </template>
     
      
-
-
-
-
 <script>
 import axios from "axios";
 export default {
@@ -57,21 +53,18 @@ export default {
           this.userlist = this.userlist.filter((item) => item.id !== id);
           this.$message({
             type: "success",
-            $message: "删除成功！",
+            message: "删除成功！",
           });
         }
       });
     },
     goto(id) {
-      // 跳转参数路由
-      // this.$router.push("/user/edit/" +id + '?a=10');
+      
+      // this.$router.push("/user/edit/" +id );
       this.$router.push({
         name: "userEdit",
         params: { id },
-        query: {
-          a: 10,
-          b: 20,
-        },
+       
       });
     },
   },

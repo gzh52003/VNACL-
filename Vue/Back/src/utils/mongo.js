@@ -41,6 +41,14 @@ async function remove(collectionName,options){
 
 
 }
+async function update(collectionName,query,newData){
+    const {db,client} = await connect();
+    const collection = db.collection(collectionName);
+    const result = await collection.updateMany(query,newData);
+    client.close();
+    return result;
+
+}
 
 
 
@@ -84,6 +92,6 @@ async function find(collectionName,query={},options={}){
 module.exports = {
     insert,
     remove,
-  
+    update,
     find 
 }

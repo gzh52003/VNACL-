@@ -1,41 +1,30 @@
 const express = require("express");
 const router = express.Router();
 const mongo = require("../utils/mongo");
-// const { find } = require("../utils/mongo");
-// const {MongoClient} = require("mongodb");
-// // console.log(MongoClient);
-// const url = "mongodb://localhost:27017";
-// const dbName = "jialigou"
-// MongoClient.connect(url,function(err,client){
-//     // console.log(err);
-//     // console.log(client);
-//     const db = client.db(dbName);
-//     console.log(db);
-
-// })
 
 
 router.get("/",async(req,res)=>{
-    let{page=1,size,sort="id"} = req.query;
+    let{page=1,limit,sort="id"} = req.query;
     page = page *1;
-    size = size *1;
-    let limit = size;
-    let skip = (page - 1) * size;
+    limit = limit *1;
+  
+    let skip = (page - 1) * limit;
     sort = sort.split(",")
 
-    
-
-    let result = await mongo.find("goods",{},{skip,limit,sort})
+let result = await mongo.find("goods",{},{skip,limit,sort})
+   res.send(result);
+})
+router.get("/:id",async (req,res)=>{
+    let {id} = req.params;
+    id = id*1;
+    let result = await mongo.find("goods",{id})
     res.send(result);
+
 })
 
 router.delete("/:id",async (req,res)=>{
     let {id} = req.params;
     id = id*1;
-    // console.log(req.params);
-    // console.log(id);
-
-  
    try{
     let result = await mongo.remove("goods",{id:id})
     res.send({

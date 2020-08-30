@@ -8,99 +8,78 @@
       ref="ruleForm"
       label-width="100px"
     >
-      <el-form-item label="用户名" prop="username">
+      <el-form-item label="用户名" >
         <el-input type="text" v-bind:value="ruleForm.username" disabled></el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="性别" prop="gender">
+     
+      <el-form-item label="性别" >
         <el-select v-model="ruleForm.gender">
           <el-option label="男" value="male"></el-option>
           <el-option label="女" value="female"></el-option>
           <el-option label="保密" value="baomi"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="年龄" prop="age">
-        <el-input v-model.number="ruleForm.age"></el-input>
+      <el-form-item label="电话号码" prop="phonenumber">
+        <el-input v-model="ruleForm.phonenumber"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="success" @click="submitForm">修改</el-button>
+        <el-button type="success" @click=submitForm>修改</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 <script>
+import axios from "axios"
 export default {
   data() {
-    var checkAge = (rule, value, callback) => {
-      if (value < 18) {
-        // 如果输入的值不符合规则，则提示信息
-        return callback(new Error("未满18禁止浏览"));
-      }else{
-          // 规则通过后的回掉
-          callback();
-      }
-    };
+  
     return {
-      userid: "",
+      userid: "1",
       ruleForm: {
         username: "",
-        password: "",
+        phonenumber:"",
         gender: "male",
-        age: "",
+       
       },
       rules: {
-        age: [
-          { required: true, message: "年龄必填", trigger: "change" },
-          { type: "number", message: "只能输入数字", trigger: "change" },
-          // 自定义校验规则
-          {
-            validator: checkAge,
-            trigger: "change",
-          },
+        phonenumber: [
+          { required: true, message: "电话号码必填", trigger: "blur" },
+          // { type: "number", message: "只能输入数字", trigger: "blur" },
+          {min:11,max:11,message:"长度为11个字符",trigger:"blur"}
         ],
-        password: [
-          {
-            min: 6,
-            max: 12,
-            message: "密码长度必须在 6 到 12 个字符",
-            trigger: "blur",
-          },
-        ],
+       
       },
     };
   },
   methods: {
     submitForm() {
-      this.$refs["ruleForm"].validate(async (valid) => {console.log(13,valid)
-        // valid为校验结果，全部校验通过是值为true,否则为false
-        if (valid) {
-            const {userid,ruleForm} = this
-          const {data} = await this.$request.put("/user/"+userid,{
-              ...ruleForm
-          });
-          if(data.code === 1){
-              this.$message({
-                type: "success",
-                message: "修改成",
-            });
-          }
-        } else {
-          console.log("error submit!!");
+      this.$refs["ruleForm"].validate(async (valid)=>{
+        if(valid){
+          const {userid,ruleForm} = this;
+         let result = await axios.put("http://localhost:2002/api/user/" + userid,{
+           ...ruleForm,
+         })
+        //  console.log(result);
+         const data = result.data;
+         console.log(data);
+
+
+
+          alert("修改成功")
+        }else{
           return false;
         }
-      });
-    },
+      })
+  }
   },
   async created() {
-    console.log("Router=", this.$router);
-    console.log("Route=", this.$route);
-  
     const { id } = this.$route.params;
-    const { data } = await this.$request.get("/user/" + id);
+    console.log(id);
+    const { data } = await axios.get("http://localhost:2002/api/user/"+id)
+    Object.assign(this.ruleForm,data[0])
     this.userid = id;
-    Object.assign(this.ruleForm, data.data);
+  
+    console.log(data);
   },
 };
 </script>

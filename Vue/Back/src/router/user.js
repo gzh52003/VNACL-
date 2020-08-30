@@ -7,6 +7,34 @@ router.get("/",async(req,res)=>{
 let result = await mongo.find("user");
     res.send(result);
 })
+router.get("/:id",async (req,res)=>{
+    let {id} = req.params;
+    id = id*1;
+    let result = await mongo.find("user",{id})
+    res.send(result);
+
+})
+router.put("/:id",async (req,res)=>{
+    const {id} = req.params;
+    let {gender,phonenumber} = req.body;
+    let newData = {gender,phonenumber};
+    try{
+        await mongo.update("user",{id:id},{$set:newData});
+        res.send({
+            data:{
+                id,
+                ...newData
+            },
+            code:1
+        })
+    }catch(err){
+        res.send({
+            code:0
+        })
+    }
+    console.log(newData);
+
+})
 
 
 
