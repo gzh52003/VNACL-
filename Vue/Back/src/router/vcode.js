@@ -7,12 +7,14 @@ const svgCaptcha = require("svg-captcha");
 router.get("/",function(req,res){
     const captcha = svgCaptcha.create({
         height:25,
-        fontSize:40
+        fontSize:40,
+        ignoreChars:"0oli1"
+
 
     });
     req.session.vcode = captcha.text.toLowerCase();
     res.send({
-        code:0,
+        code:1,
         data:captcha.data,
     });
    

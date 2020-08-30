@@ -8,6 +8,7 @@ router.get("/", async function(req,res){
     let {username,password,vcode,mdl} = req.query;
     console.log(vcode);
     console.log(req.session);
+    console.log(req.query);
    
     if(vcode !== req.session.vcode){
         res.send({

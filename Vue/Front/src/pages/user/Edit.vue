@@ -86,7 +86,8 @@ export default {
            this.$message({
              type:"success",
              message:"修改成功"
-           })
+           });
+          
          }
          }else{
           return false;
@@ -107,10 +108,18 @@ export default {
          const data = result.data;
          console.log(data);
          if(data.code ===1){
+           this.ruleForm = {
+           id:"",
+          username: "",
+          phonenumber: "",
+          gender: "男",
+         
+        }
            this.$message({
              type:"success",
              message:"添加成功"
-           })
+           });
+           
          }
          }else{
           return false;
@@ -119,6 +128,20 @@ export default {
   }
 
 
+  },
+  watch:{
+    "$route.path":function(newVal,){
+      if(newVal=="/user/add"){
+        this.userid = ""
+         this.ruleForm = {
+           id:"",
+          username: "",
+          phonenumber: "",
+          gender: "男",
+         
+        }
+      }
+    }
   },
   async created() {
     const { id } = this.$route.params;

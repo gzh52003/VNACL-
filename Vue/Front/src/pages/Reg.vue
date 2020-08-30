@@ -1,6 +1,7 @@
 <template>
     <div>
-       login
+       reg
+       
     </div>
 </template>
 
