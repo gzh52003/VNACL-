@@ -18,7 +18,7 @@ router.post("/", async function(req,res){
 
     }catch(err){
         res.send({
-            code:1,
+            code:0,
            
             msg:"fail"
         })

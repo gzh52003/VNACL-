@@ -15,7 +15,8 @@ router.get("/:id",async (req,res)=>{
 
 })
 router.put("/:id",async (req,res)=>{
-    const {id} = req.params;
+    let {id} = req.params;
+    id = id *1;
     let {gender,phonenumber} = req.body;
     let newData = {gender,phonenumber};
     try{
@@ -59,6 +60,30 @@ res.send({
         msg:"删除失败"
 })
    }
+})
+
+router.post("/", async function(req,res){
+    let {id,username,gender,phonenumber} = req.body;
+    console.log(req.body);
+    let result;
+    try{
+        result = await mongo.insert("user",{
+           id,username,gender,phonenumber
+        })
+        res.send({
+            code:1,
+            msg:"success"
+
+        })
+
+    }catch(err){
+        res.send({
+            code:0,
+           
+            msg:"fail"
+        })
+    }
+
 })
 
 module.exports = router;
